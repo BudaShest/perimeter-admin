@@ -1,7 +1,19 @@
 <?php
 
+
+use App\Http\Controllers\AreaController;
+use App\Http\Controllers\PatrolController;
 use Illuminate\Support\Facades\Route;
 
+Route::controller(AreaController::class)->group(function () {
+    Route::get("/area", "index");
+});
+
+Route::controller(PatrolController::class)->group(function () {
+    Route::get("/patrol", "index");
+});
+
+// todo autogeenrated stuff
 Route::get('/', function () {
     Log::info('Welcome page visited');
     return view('welcome');
