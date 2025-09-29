@@ -14,10 +14,6 @@ Route::controller(PatrolController::class)->group(function () {
 });
 
 // todo autogeenrated stuff
-Route::get('/', function () {
-    Log::info('Welcome page visited');
-    return view('welcome');
-});
 
 Route::get('/info', function () {
     Log::info('Phpinfo page visited');

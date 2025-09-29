@@ -1,4 +1,5 @@
-@import 'tailwindcss';
+@import 'bootstrap/dist/css/bootstrap.min.css';
+@import 'bootstrap-icons/font/bootstrap-icons.css';
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
@@ -8,4 +9,38 @@
 @theme {
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+.wrapper {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: 120px auto 200px;
+    grid-template-areas:
+            "header header header header header header"
+            ". main main main main ."
+            "footer footer footer footer footer footer";
+}
+
+.site-header {
+    background-color: lightgray;
+    grid-area: header;
+}
+
+.site-main {
+    background-color: coral;
+    grid-area: main;
+}
+
+.site-footer {
+    background-color: lightblue;
+    grid-area: footer;
+}
+
+@media screen and (max-width: 768px) {
+    .wrapper {
+        grid-template-areas:
+            "header header header header header header"
+            "main main main main main main"
+            "footer footer footer footer footer footer";
+    }
 }

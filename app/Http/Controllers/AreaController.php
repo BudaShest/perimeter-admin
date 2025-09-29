@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreAreaRequest;
 use App\Http\Requests\UpdateAreaRequest;
 use App\Models\Area;
+use Illuminate\Support\Facades\View;
 
 class AreaController extends Controller
 {
@@ -13,7 +14,9 @@ class AreaController extends Controller
      */
     public function index()
     {
-        return Area::all();
+        return View::make('area.index', [
+            'areas' => Area::all()
+        ]);
     }
 
     /**
