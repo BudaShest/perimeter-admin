@@ -22,13 +22,27 @@
 <body>
 <div class="wrapper">
     <header class="site-header">
-        Заголовок
+        <nav class="container">
+            <div class="logo">
+            </div>
+
+            <button class="btn btn-danger">Выйти</button>
+        </nav>
     </header>
     <main class="site-main">
         {{ $slot }}
     </main>
     <footer class="site-footer">
-        Подвал
+        <div class="container">
+            <ul>
+                <li>
+                    <a href="">budashest@gmail.com</a>
+                </li>
+                <li>
+                    <a href="">+7-995-472-06-14</a>
+                </li>
+            </ul>
+        </div>
     </footer>
 </div>
 </body>

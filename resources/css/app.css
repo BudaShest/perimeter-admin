@@ -11,31 +11,6 @@
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
 
-.wrapper {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    grid-template-rows: 120px auto 200px;
-    grid-template-areas:
-            "header header header header header header"
-            ". main main main main ."
-            "footer footer footer footer footer footer";
-}
-
-.site-header {
-    background-color: lightgray;
-    grid-area: header;
-}
-
-.site-main {
-    background-color: coral;
-    grid-area: main;
-}
-
-.site-footer {
-    background-color: lightblue;
-    grid-area: footer;
-}
-
 @media screen and (max-width: 768px) {
     .wrapper {
         grid-template-areas:
@@ -43,4 +18,66 @@
             "main main main main main main"
             "footer footer footer footer footer footer";
     }
+}
+
+
+.wrapper {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: 70px auto 200px;
+    grid-template-areas:
+            "header header header header header header"
+            ". main main main main ."
+            "footer footer footer footer footer footer";
+}
+
+section.container {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+/* HEADER */
+
+.site-header {
+    border-bottom: 2px solid lightgray;
+    grid-area: header;
+}
+
+.site-header > .container {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo {
+    background-color: teal;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+
+/* MAIN */
+
+.site-main {
+    grid-area: main;
+}
+
+.areas-content {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 20px;
+    flex-wrap: wrap;
+}
+
+.area-card {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+/* FOOTER */
+
+.site-footer {
+    background-color: #e0dfdf;
+    grid-area: footer;
 }

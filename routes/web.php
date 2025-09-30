@@ -7,6 +7,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::controller(AreaController::class)->group(function () {
     Route::get("/area", "index");
+    Route::get("/area/create", "create");
+    Route::post("/area", "store");
+    Route::get("/area/{id}", "show");
+    Route::get("/area/{id}/edit", "edit");
+    Route::put("/area/{id}", "update");
+    Route::delete("/area/{id}", "destroy");
 });
 
 Route::controller(PatrolController::class)->group(function () {
