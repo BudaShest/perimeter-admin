@@ -19,4 +19,8 @@ class Point extends Model
     protected $primaryKey = "point_id";
     /** @var string[] */
     protected $fillable = ["point_id", "name", "uid", "lat", "lon"];
+    /** @var bool */
+    protected $timestamps = true;
+
+
 }
