@@ -17,7 +17,7 @@
                         <th scope="row">Действия</th>
                         <td>
                             <a href="/area/{{ $area->area_id }}/edit" class="btn btn-secondary">Изменить</a>
-                            <form action="/area/{{ $area->area_id }}">
+                            <form class="delete-btn-form" method="post" action="/area/{{ $area->area_id }}">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger" onclick="return confirm('Вы уверены что хотите удалить?')">
@@ -94,7 +94,20 @@
 
                 <div class="tab-content" id="nav-tabContent">
                     <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-
+                        <form class="row" method="post" action="">
+                            @csrf
+                            <div class="mb-3 col">
+                                <label class="form-label" for="">Название</label>
+                                <input class="form-control" type="text">
+                            </div>
+                            <div class="mb-3 col">
+                                <label class="form-label" for="">UUID Карты</label>
+                                <input class="form-control" type="text">
+                            </div>
+                            <div class="mb-3 col align-content-end">
+                                <button type="submit" class="btn btn-primary">Привязать</button>
+                            </div>
+                        </form>
                     </div>
                     <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
 

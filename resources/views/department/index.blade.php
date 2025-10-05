@@ -16,12 +16,17 @@
 
         <div class="main-content">
             @foreach($departments as $department)
-                <div class="card">
+                <div class="card" style="width: 100%">
                     <a href="/department/{{ $department->department_id }}">
-                        <h5 class="card-header">{{ $department->name }}</h5>
+                        <h5 class="card-header">Подразделение "{{ $department->name }}"</h5>
                     </a>
                     <div class="card-body">
-                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                        <h6>Объекты</h6>
+                        <ul>
+                            @foreach($department->areas as $area)
+                                <li><a href="/area/{{ $area->area_id }}">{{ $area->name }}</a></li>
+                            @endforeach
+                        </ul>
                         <div class="dropdown">
                             <button
                                 class="btn btn-primary dropdown-toggle"
@@ -42,7 +47,6 @@
                                         Удалить
                                     </button>
                                 </form>
-                                <li><a class="dropdown-item" href="#">Удалить</a></li>
                             </ul>
                         </div>
                     </div>

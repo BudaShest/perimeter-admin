@@ -23,7 +23,8 @@
                     <form method="post" class="delete-btn-form" action="/department/{{ $department->department_id }}">
                         @method('DELETE')
                         @csrf
-                        <button type="submit" class="btn btn-danger" onclick="return confirm('Вы уверены что хотите удалить?')">
+                        <button type="submit" class="btn btn-danger"
+                                onclick="return confirm('Вы уверены что хотите удалить?')">
                             <i class="bi bi-trash"></i>
                             Удалить
                         </button>
@@ -40,6 +41,42 @@
             </tr>
             </tbody>
         </table>
+
+        <div class="container departments-areas">
+            <h2>Объекты</h2>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            Имя
+                        </th>
+                        <th>
+                            Лимит точек
+                        </th>
+                        <th>
+                            Кол-во олпаченных дней
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($department->areas as $area)
+                        <tr>
+                            <td>
+                                <a href="/area/{{ $area->area_id }}">{{ $area->name }}</a>
+                            </td>
+                            <td>
+                                <span class="badge bg-primary">{{ $area->point_limit }}</span>
+                            </td>
+                            <td>
+                                <span class="badge bg-primary">{{ $area->paid_days }}</span>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+
         </div>
     </section>
 </x-layout>
