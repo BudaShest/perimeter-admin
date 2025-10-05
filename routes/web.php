@@ -4,6 +4,7 @@
 use App\Http\Controllers\AreaController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\PatrolController;
+use App\Http\Controllers\PointController;
 use Illuminate\Support\Facades\Route;
 
 Route::controller(AreaController::class)->group(function () {
@@ -24,6 +25,11 @@ Route::controller(DepartmentController::class)->group(function () {
    Route::get("/department/{id}/edit", "edit");
    Route::put("/department/{id}", "update");
    Route::delete("/department/{id}", "destroy");
+});
+
+Route::controller(PointController::class)->group(function () {
+//    Route::get("/point", "index");
+    Route::post("/point", "store");
 });
 
 Route::controller(PatrolController::class)->group(function () {

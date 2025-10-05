@@ -13,6 +13,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property int $paid_days
  * @property $created_at
  * @property $updated_ar
+ *
+ * @property-read Point[] $points
  */
 final class Area extends Model
 {
@@ -27,6 +29,6 @@ final class Area extends Model
 
     public function points(): BelongsToMany
     {
-        return $this->belongsToMany(Point::class, 'points_areas', 'area_id', 'point_id');
+        return $this->belongsToMany(Point::class, 'area_points', 'area_id', 'point_id');
     }
 }

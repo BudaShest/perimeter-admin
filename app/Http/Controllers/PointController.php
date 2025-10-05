@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StorePointRequest;
 use App\Http\Requests\UpdatePointRequest;
 use App\Models\Point;
+use Illuminate\Support\Facades\Response;
 
 class PointController extends Controller
 {
@@ -29,7 +30,11 @@ class PointController extends Controller
      */
     public function store(StorePointRequest $request)
     {
-        //
+        $newPoint = new Point();
+        $newPoint->fill($request->all());
+        $newPoint->save();
+
+        return Response::redirectTo('department/');
     }
 
     /**

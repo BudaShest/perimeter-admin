@@ -1,3 +1,7 @@
+@php use App\Models\Area; @endphp
+@php
+/** @var Area $area */
+@endphp
 <x-layout>
     <section class="container">
         <nav aria-label="breadcrumb">
@@ -94,20 +98,45 @@
 
                 <div class="tab-content" id="nav-tabContent">
                     <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-                        <form class="row" method="post" action="">
+                        <form class="row" method="post" action="/point">
                             @csrf
                             <div class="mb-3 col">
                                 <label class="form-label" for="">Название</label>
-                                <input class="form-control" type="text">
+                                <input name="name" class="form-control" type="text">
                             </div>
                             <div class="mb-3 col">
-                                <label class="form-label" for="">UUID Карты</label>
-                                <input class="form-control" type="text">
+                                <label class="form-label" for="">UID Карты</label>
+                                <input name="uid" class="form-control" type="text">
                             </div>
                             <div class="mb-3 col align-content-end">
                                 <button type="submit" class="btn btn-primary">Привязать</button>
                             </div>
                         </form>
+
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="row">
+                                        Название
+                                    </th>
+                                    <th scope="row">
+                                        UID Карты
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($area->points as $point)
+                                    <tr>
+                                        <td>
+                                            {{ $point->name }}
+                                        </td>
+                                        <td>
+                                            {{ $point->uid }}
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
                     <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
 
