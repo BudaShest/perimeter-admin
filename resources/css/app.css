@@ -46,6 +46,19 @@ section.container {
     margin-bottom: 20px;
 }
 
+.draggable {
+    /*user-select: none;*/
+    /*-webkit-user-select: none;*/
+    /*cursor: default;*/
+}
+
+
+.draggable  > *{
+    /*-webkit-user-select: none;*/
+    /*user-select: none;*/
+    /*cursor: default;*/
+}
+
 /* HEADER */
 
 .site-header {
@@ -86,4 +99,50 @@ section.container {
 .site-footer {
     background-color: #e0dfdf;
     grid-area: footer;
+}
+
+/* DRAG AND DROP */
+
+.sortable-container {
+    max-width: 500px;
+    margin: 20px auto;
+    padding: 20px;
+}
+
+.sortable-item {
+    padding: 15px;
+    margin: 10px 0;
+    background: #f8f9fa;
+    border: 2px solid #dee2e6;
+    border-radius: 8px;
+    cursor: move;
+    transition: all 0.3s ease;
+    user-select: none;
+}
+
+.sortable-item.dragging {
+    opacity: 0.5;
+    background: #e9ecef;
+    border: 2px dashed #007bff;
+}
+
+.sortable-item.over {
+    border: 2px dashed #28a745;
+    background: #d4edda;
+}
+
+.sortable-item:hover {
+    background: #e9ecef;
+}
+
+.item-number {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    background: #007bff;
+    color: white;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 30px;
+    margin-right: 10px;
 }

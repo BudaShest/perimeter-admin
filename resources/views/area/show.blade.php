@@ -47,11 +47,15 @@
                     </tr>
                     <tr>
                         <th scope="row">Кол-во оплаченных дней</th>
-                        <td colspan="2">{{ $area->paid_days }}</td>
+                        <td colspan="2">
+                            <span class="badge bg-primary">{{ $area->paid_days }}</span>
+                        </td>
                     </tr>
                     <tr>
                         <th scope="row">Лимит точек</th>
-                        <td colspan="2">{{ $area->point_limit }}</td>
+                        <td colspan="2">
+                            <span class="badge bg-primary">{{ $area->point_limit }}</span>
+                        </td>
                     </tr>
                     <tr>
                         <th scope="row">Дата создания</th>
@@ -77,7 +81,7 @@
                             aria-controls="nav-home"
                             aria-selected="true">Точки</button>
                         <button
-                            class="nav-link"
+                            class="nav-link routes-link"
                             id="nav-profile-tab"
                             data-bs-toggle="tab"
                             data-bs-target="#nav-profile"
@@ -138,9 +142,60 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
 
+                    <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                        <button class="btn btn-secondary">
+                            Создать маршрут
+                        </button>
+
+                        <div class="sortable-container" id="sortableContainer">
+                            @foreach($area->points as $point)
+                                <div draggable="true" class="sortable-item">
+                                    {{ $point->name }}
+                                </div>
+                            @endforeach
+                        </div>
+
+                        <div class="accordion pt-2" id="accordionExample">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingOne">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                        Accordion Item #1
+                                    </button>
+                                </h2>
+                                <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                    <div class="accordion-body">
+                                        <strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingTwo">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                        Accordion Item #2
+                                    </button>
+                                </h2>
+                                <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                                    <div class="accordion-body">
+                                        <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingThree">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                        Accordion Item #3
+                                    </button>
+                                </h2>
+                                <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                                    <div class="accordion-body">
+                                        <strong>This is the third item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
                     <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
 
                     </div>
