@@ -88,8 +88,8 @@ class AreaController extends Controller
         $area = Area::where([
             'area_id' => $areaID
         ])->firstOrFail();
-
-        var_dump($area);die;
+//
+//        var_dump($area);die;
 
         $area->delete();
 

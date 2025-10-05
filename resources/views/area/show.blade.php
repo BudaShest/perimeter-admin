@@ -10,6 +10,7 @@
 
         <div class="main-content">
             <h1>Объект {{ $area->name }}</h1>
+
             <table class="table">
                 <tbody>
                     <tr>

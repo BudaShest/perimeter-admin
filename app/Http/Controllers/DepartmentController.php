@@ -43,32 +43,56 @@ class DepartmentController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Department $department)
+    public function show(int $departmentID)
     {
-        //
+        $department = Department::where([
+            'department_id' => $departmentID
+        ])->firstOrFail();
+
+        return View::make('department.show', [
+            'department' => $department
+        ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Department $department)
+    public function edit(int $departmentID)
     {
-        //
+        $department = Department::where([
+            'department_id' => $departmentID
+        ])->firstOrFail();
+
+        return View::make('department.edit', [
+            'department' => $department
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateDepartmentRequest $request, Department $department)
+    public function update(UpdateDepartmentRequest $request, int $departmentID)
     {
-        //
+        $department = Department::where([
+            'department_id' => $departmentID
+        ])->firstOrFail();
+
+        $department->update($request->all());
+
+        return Response::redirectTo('department/' . $department->department_id);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Department $department)
+    public function destroy(int $departmentID)
     {
-        //
+        $department = Department::where([
+            'department_id' => $departmentID
+        ])->firstOrFail();
+
+        $department->delete();
+
+        return Response::redirectTo('department');
     }
 }

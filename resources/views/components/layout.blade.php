@@ -26,6 +26,21 @@
             <div class="logo">
             </div>
 
+            <ul class="nav nav-pills nav-fill">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/department">Подразделения</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/area">Объекты</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Link</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                </li>
+            </ul>
+
             <button class="btn btn-danger">Выйти</button>
         </nav>
     </header>

@@ -17,10 +17,34 @@
         <div class="main-content">
             @foreach($departments as $department)
                 <div class="card">
-                    <h5 class="card-header">{{ $department->name }}</h5>
+                    <a href="/department/{{ $department->department_id }}">
+                        <h5 class="card-header">{{ $department->name }}</h5>
+                    </a>
                     <div class="card-body">
                         <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                        <div class="dropdown">
+                            <button
+                                class="btn btn-primary dropdown-toggle"
+                                type="button"
+                                id="dropdownCardMenu{{ $department->department_id }}"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
+                            >
+                                Управление
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownCardMenu{{ $department->department_id }}">
+                                <li><a class="dropdown-item" href="/department/{{ $department->department_id }}/edit">Изменить</a></li>
+                                <form method="post" class="delete-btn-form" action="/department/{{ $department->department_id }}">
+                                    @method('DELETE')
+                                    @csrf
+                                    <button type="submit" class="dropdown-item" onclick="return confirm('Вы уверены что хотите удалить?')">
+                                        <i class="bi bi-trash"></i>
+                                        Удалить
+                                    </button>
+                                </form>
+                                <li><a class="dropdown-item" href="#">Удалить</a></li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             @endforeach

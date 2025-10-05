@@ -20,6 +20,10 @@ Route::controller(DepartmentController::class)->group(function () {
    Route::get("/department", "index");
    Route::get("/department/create", "create");
    Route::post("/department", "store");
+   Route::get("/department/{id}", "show");
+   Route::get("/department/{id}/edit", "edit");
+   Route::put("/department/{id}", "update");
+   Route::delete("/department/{id}", "destroy");
 });
 
 Route::controller(PatrolController::class)->group(function () {
