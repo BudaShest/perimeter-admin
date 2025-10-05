@@ -4,15 +4,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
+ * @property int $area_id
  * @property string $name
  * @property string $description
  * @property int $point_limit
  * @property int $paid_days
+ * @property $created_at
+ * @property $updated_ar
  */
-class Area extends Model
+final class Area extends Model
 {
     /** @var string  */
     protected $table = "areas";
@@ -20,6 +22,8 @@ class Area extends Model
     protected $primaryKey = "area_id";
     /** @var string[] */
     protected $fillable = ["name", "description", "point_limit", "paid_days"];
+
+    public $timestamps = true;
 
     public function points(): BelongsToMany
     {

@@ -2,6 +2,7 @@
 
 
 use App\Http\Controllers\AreaController;
+use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\PatrolController;
 use Illuminate\Support\Facades\Route;
 
@@ -13,6 +14,12 @@ Route::controller(AreaController::class)->group(function () {
     Route::get("/area/{id}/edit", "edit");
     Route::put("/area/{id}", "update");
     Route::delete("/area/{id}", "destroy");
+});
+
+Route::controller(DepartmentController::class)->group(function () {
+   Route::get("/department", "index");
+   Route::get("/department/create", "create");
+   Route::post("/department", "store");
 });
 
 Route::controller(PatrolController::class)->group(function () {

@@ -63,7 +63,7 @@ section.container {
     grid-area: main;
 }
 
-.areas-content {
+.main-content {
     display: flex;
     justify-content: space-between;
     padding-top: 20px;

@@ -9,7 +9,7 @@
             <a class="btn btn-primary" href="/area/create">Создать</a>
         </nav>
 
-        <div class="areas-content">
+        <div class="main-content">
             @foreach($areas as $area)
                 <div class="card area-card" style="width: 18rem;">
                     <img src="https://w7.pngwing.com/pngs/424/251/png-transparent-color-wheel-habersetzer-und-kollegen-gmbh-color-theory-color-scheme-location-logo-television-logo-color.png" class="card-img-top" alt="...">

@@ -8,7 +8,7 @@
             </ol>
         </nav>
 
-        <div class="areas-content">
+        <div class="main-content">
             <h1>Объект {{ $area->name }}</h1>
             <table class="table">
                 <tbody>

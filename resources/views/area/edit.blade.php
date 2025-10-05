@@ -8,7 +8,7 @@
             </ol>
         </nav>
 
-        <div class="areas-content">
+        <div class="main-content">
             <form method="post" action="/area/{{ $area->area_id }}">
                 @method('PUT')
                 @csrf
