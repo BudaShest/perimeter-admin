@@ -4,7 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Мой сайт')</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
+
+    <!-- Styles / Scripts -->
+    @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @else
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    @endif
     <style>
         .navbar-brand { font-weight: bold; }
         .auth-container { max-width: 400px; margin: 100px auto; }
@@ -18,8 +28,16 @@
         <a class="navbar-brand" href="/">Мой сайт</a>
 
         <div class="navbar-nav ms-auto">
+            <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="/department">Подразделения</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/area">Объекты</a>
+            </li>
             @auth
-                <span class="navbar-text me-3">Привет, {{ Auth::user()->name }}!</span>
+                <li class="nav-item">
+                    <a class="nav-link active" href="/dashboard">{{ Auth::user()->name }}</a>
+                </li>
                 <form action="{{ route('logout') }}" method="POST" class="d-inline">
                     @csrf
                     <button type="submit" class="btn btn-outline-light btn-sm">Выйти</button>
@@ -55,7 +73,17 @@
 <main class="container py-4">
     @yield('content')
 </main>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<footer class="site-footer">
+    <div class="container">
+        <ul>
+            <li>
+                <a href="">budashest@gmail.com</a>
+            </li>
+            <li>
+                <a href="">+7-995-472-06-14</a>
+            </li>
+        </ul>
+    </div>
+</footer>
 </body>
 </html>

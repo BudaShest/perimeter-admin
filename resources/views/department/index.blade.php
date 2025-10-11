@@ -3,7 +3,12 @@
 
     /** @var Department[] $departments */
 @endphp
-<x-layout>
+
+@extends('layouts.app')
+
+@section('title', 'Подразделения')
+
+@section('content')
     <section>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
@@ -54,4 +59,4 @@
             @endforeach
         </div>
     </section>
-</x-layout>
+@endsection;
