@@ -5,7 +5,7 @@
 @section('content')
     <div class="text-center py-5">
         <h1 class="display-4">Добро пожаловать!</h1>
-        <p class="lead">Это главная страница вашего сайта</p>
+        <p class="lead">Система управления обходами "Периметр"</p>
 
         @guest
             <div class="mt-4">

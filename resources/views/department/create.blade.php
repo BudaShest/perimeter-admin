@@ -8,7 +8,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/main">Главная</a></li>
             <li class="breadcrumb-item"><a href="/area">Подразделения</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Новый объект</li>
+            <li class="breadcrumb-item active" aria-current="page">Новое подразделение</li>
         </ol>
     </nav>
 

@@ -37,7 +37,7 @@ class DepartmentController extends Controller
         /** @var Department $newDepartment */
         $newDepartment = Department::create($request->all());
 
-        return Response::redirectTo('department/' . $newDepartment->department_id);
+        return Response::redirectTo('department/' . $newDepartment->id);
     }
 
     /**
@@ -46,7 +46,7 @@ class DepartmentController extends Controller
     public function show(int $departmentID)
     {
         $department = Department::where([
-            'department_id' => $departmentID
+            'id' => $departmentID
         ])->firstOrFail();
 
         return View::make('department.show', [
@@ -60,7 +60,7 @@ class DepartmentController extends Controller
     public function edit(int $departmentID)
     {
         $department = Department::where([
-            'department_id' => $departmentID
+            'id' => $departmentID
         ])->firstOrFail();
 
         return View::make('department.edit', [
@@ -73,13 +73,14 @@ class DepartmentController extends Controller
      */
     public function update(UpdateDepartmentRequest $request, int $departmentID)
     {
+        /** @var Department $department */
         $department = Department::where([
-            'department_id' => $departmentID
+            'id' => $departmentID
         ])->firstOrFail();
 
         $department->update($request->all());
 
-        return Response::redirectTo('department/' . $department->department_id);
+        return Response::redirectTo('department/' . $department->id);
     }
 
     /**
@@ -88,7 +89,7 @@ class DepartmentController extends Controller
     public function destroy(int $departmentID)
     {
         $department = Department::where([
-            'department_id' => $departmentID
+            'id' => $departmentID
         ])->firstOrFail();
 
         $department->delete();

@@ -1,3 +1,9 @@
+@php
+    use App\Models\Area;
+
+    /** @var Area $area */
+@endphp
+
 @extends('layouts.app')
 
 @section('title', 'Изменение объекта')
@@ -13,7 +19,7 @@
     </nav>
 
     <div class="main-content">
-        <form method="post" action="/area/{{ $area->area_id }}">
+        <form method="post" action="/area/{{ $area->id }}">
             @method('PUT')
             @csrf
             <div class="mb-3">

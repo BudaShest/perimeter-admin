@@ -35,7 +35,7 @@ class AreaController extends Controller
     {
         $newArea = Area::create($request->all());
 
-        return Response::redirectTo('area/' . $newArea->area_id);
+        return Response::redirectTo('area/' . $newArea->id);
     }
 
     /**
@@ -44,7 +44,7 @@ class AreaController extends Controller
     public function show(int $areaID)
     {
         $area = Area::where([
-            'area_id' => $areaID
+            'id' => $areaID
         ])->firstOrFail();
 
         return View::make('area.show', [
@@ -58,7 +58,7 @@ class AreaController extends Controller
     public function edit(int $areaID)
     {
         $area = Area::where([
-            'area_id' => $areaID
+            'id' => $areaID
         ])->firstOrFail();
 
         return View::make('area.edit', [
@@ -72,12 +72,12 @@ class AreaController extends Controller
     public function update(UpdateAreaRequest $request, int $areaID)
     {
         $area = Area::where([
-            'area_id' => $areaID
+            'id' => $areaID
         ])->firstOrFail();
 
         $area->update($request->all());
 
-        return Response::redirectTo('area/' . $area->area_id);
+        return Response::redirectTo('area/' . $area->id);
     }
 
     /**
@@ -86,10 +86,8 @@ class AreaController extends Controller
     public function destroy(int $areaID)
     {
         $area = Area::where([
-            'area_id' => $areaID
+            'id' => $areaID
         ])->firstOrFail();
-//
-//        var_dump($area);die;
 
         $area->delete();
 

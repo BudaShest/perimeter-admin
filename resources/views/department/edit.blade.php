@@ -17,7 +17,7 @@
     </nav>
 
     <div class="content">
-        <form method="post" action="/department/{{ $department->department_id }}">
+        <form method="post" action="/department/{{ $department->id }}">
             @method('PUT')
             @csrf
             <div class="mb-3">

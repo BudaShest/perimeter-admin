@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 /**
  * @property int $id
  * @property string $name
+ * @property string $description
  * @property $created_at
  * @property $updated_ar
  *
@@ -23,9 +24,13 @@ final class Department extends Model
 
     public $timestamps = true;
 
-    protected $fillable = ["name"];
+    protected $fillable = ["name", "description"];
 
     public function areas(): HasMany {
-        return $this->hasMany(Area::class, 'department_id');
+        return $this->hasMany(Area::class);
+    }
+
+    public function users(): HasMany {
+        return $this->hasMany(User::class);
     }
 }
