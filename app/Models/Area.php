@@ -37,10 +37,10 @@ final class Area extends Model
     }
 
     public function users(): BelongsToMany {
-        return $this->belongsToMany(User::class, 'area_users');
+        return $this->belongsToMany(User::class, 'area_user');
     }
 
     public function phones(): BelongsToMany {
-        return $this->belongsToMany(Phone::class, 'area_phones');
+        return $this->belongsToMany(Phone::class, 'area_phone');
     }
 }

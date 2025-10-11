@@ -239,12 +239,17 @@ use App\Models\Area;
                         <table class="table">
                             <thead>
                             <tr>
-                                <th></th>
-                                <th></th>
+                                <th>Логин</th>
+                                <th>Действия</th>
                             </tr>
                             </thead>
                             <tbody>
-                                @foreach() @endforeach
+                                @foreach($area->users as $user)
+                                    <tr>
+                                        <td>{{ $user->name }}</td>
+                                        <td></td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
