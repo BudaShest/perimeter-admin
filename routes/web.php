@@ -2,6 +2,7 @@
 
 
 use App\Http\Controllers\AreaController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\PatrolController;
 use App\Http\Controllers\PointController;
@@ -41,6 +42,28 @@ Route::controller(PatrolController::class)->group(function () {
 Route::get('/info', function () {
     Log::info('Phpinfo page visited');
     return phpinfo();
+});
+
+
+// Публичные маршруты
+Route::middleware('guest')->group(function () {
+    Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
+    Route::post('/register', [AuthController::class, 'register']);
+    Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+    Route::post('/login', [AuthController::class, 'login']);
+});
+
+// Защищенные маршруты
+Route::middleware('auth')->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
+});
+
+// Главная страница (доступна всем)
+Route::get('/', function () {
+    return view('welcome');
 });
 
 Route::get('/health', function () {
