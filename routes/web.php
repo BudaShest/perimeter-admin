@@ -6,7 +6,12 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\PatrolController;
 use App\Http\Controllers\PointController;
+use App\Http\Controllers\ThemeController;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 
 Route::controller(AreaController::class)->group(function () {
     Route::get("/area", "index");
@@ -44,6 +49,10 @@ Route::get('/info', function () {
     return phpinfo();
 });
 
+Route::middleware('auth')->group(function () {
+    Route::post('/theme/toggle', [ThemeController::class, 'toggle'])->name('theme.toggle');
+    Route::post('/theme/set/{theme}', [ThemeController::class, 'setTheme'])->name('theme.set');
+});
 
 // Публичные маршруты
 Route::middleware('guest')->group(function () {

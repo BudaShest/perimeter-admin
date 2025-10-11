@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'theme',
     ];
 
     /**
@@ -44,5 +45,13 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    // Метод для переключения темы
+    public function toggleTheme()
+    {
+        $this->theme = $this->theme === 'light' ? 'dark' : 'light';
+        $this->save();
+        return $this->theme;
     }
 }
