@@ -5,18 +5,24 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
+ * @property int $id
  * @property int $area_id
  * @property int $point_id
+ * @property $created_at
+ * @property $updated_at
  */
-class AreaPoint extends Model
+final class AreaPoint extends Model
 {
+    /** @var string  */
     protected $table = "area_points";
 
-    protected $primaryKey = ['area_id', 'point_id'];
+    /** @var string  */
+    protected $primaryKey = 'id';
 
+    /** @var string[]  */
     protected $fillable = ['area_id', 'point_id'];
-
-    protected $incrementing = false;
-
+    /** @var bool  */
+    protected $incrementing = true;
+    /** @var bool  */
     protected $timestamps = true;
 }

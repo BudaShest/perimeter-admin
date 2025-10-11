@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * @property int $department_id
+ * @property int $id
  * @property string $name
  * @property $created_at
  * @property $updated_ar
@@ -16,10 +16,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 final class Department extends Model
 {
 
-
+    /** @var string */
     protected $table = "departments";
-
-    protected $primaryKey = "department_id";
+    /** @var string  */
+    protected $primaryKey = "id";
 
     public $timestamps = true;
 

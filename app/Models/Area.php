@@ -6,9 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
- * @property int $area_id
+ * @property int $id
  * @property string $name
  * @property string $description
+ * @property string $image
  * @property int $point_limit
  * @property int $paid_days
  * @property $created_at
@@ -21,9 +22,9 @@ final class Area extends Model
     /** @var string  */
     protected $table = "areas";
     /** @var string */
-    protected $primaryKey = "area_id";
+    protected $primaryKey = "id";
     /** @var string[] */
-    protected $fillable = ["name", "description", "point_limit", "paid_days"];
+    protected $fillable = ["name", "description", "point_limit", "paid_days", "image"];
 
     public $timestamps = true;
 

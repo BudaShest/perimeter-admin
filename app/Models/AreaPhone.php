@@ -6,22 +6,20 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property int $id
- * @property string $name
- * @property string $uid
- * @property float $lat
- * @property float $lon
+ * @property int $area_id
+ * @property int $phone_id
+ * @property $created_at
+ * @property $updated_at
  */
-class Point extends Model
+final class AreaPhone extends Model
 {
-
     /** @var bool */
     public $timestamps = true;
     /** @var string */
-    protected $table = "points";
+    protected $table = "area_phones";
     /** @var string */
     protected $primaryKey = "id";
     /** @var string[] */
-    protected $fillable = ["id", "name", "uid", "lat", "lon"];
-
+    protected $fillable = ["id", "area_id", "phone_id",];
 
 }
