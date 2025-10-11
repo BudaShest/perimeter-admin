@@ -32,6 +32,10 @@
             "footer footer footer footer footer footer";
 }
 
+main {
+    min-height: 1vh;
+}
+
 section.container {
     padding-top: 20px;
     padding-bottom: 20px;
@@ -84,7 +88,6 @@ section.container {
 
 .site-main {
     grid-area: main;
-    min-height: 600px;
 }
 
 .main-content {
@@ -97,8 +100,9 @@ section.container {
 /* FOOTER */
 
 .site-footer {
-    background-color: #e0dfdf;
+    background-color: #292929;
     grid-area: footer;
+    padding: 30px;
 }
 
 /* DRAG AND DROP */

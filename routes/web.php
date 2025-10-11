@@ -49,10 +49,9 @@ Route::get('/info', function () {
     return phpinfo();
 });
 
-Route::middleware('auth')->group(function () {
-    Route::post('/theme/toggle', [ThemeController::class, 'toggle'])->name('theme.toggle');
-    Route::post('/theme/set/{theme}', [ThemeController::class, 'setTheme'])->name('theme.set');
-});
+Route::post('/theme/toggle', [ThemeController::class, 'toggle'])->name('theme.toggle');
+Route::post('/theme/set/{theme}', [ThemeController::class, 'setTheme'])->name('theme.set');
+Route::get('/theme/current', [ThemeController::class, 'getTheme'])->name('theme.current');
 
 // Публичные маршруты
 Route::middleware('guest')->group(function () {

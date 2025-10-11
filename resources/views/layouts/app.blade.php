@@ -131,14 +131,16 @@
 </main>
 <footer class="site-footer">
     <div class="container">
-        <ul>
-            <li>
-                <a href="">budashest@gmail.com</a>
-            </li>
-            <li>
-                <a href="">+7-995-472-06-14</a>
-            </li>
-        </ul>
+        <div class="row">
+            <ul class="list-group col-3">
+                <li class="list-group-item">
+                    <a href="">budashest@gmail.com</a>
+                </li>
+                <li class="list-group-item">
+                    <a href="">+7-995-472-06-14</a>
+                </li>
+            </ul>
+        </div>
     </div>
 </footer>
 
@@ -147,13 +149,46 @@
         const themeToggle = document.getElementById('themeToggle');
         const htmlElement = document.documentElement;
 
+        // Функция для применения темы
+        function applyTheme(theme) {
+            htmlElement.setAttribute('data-bs-theme', theme);
+            localStorage.setItem('theme', theme);
+        }
+
+        // При загрузке страницы проверяем актуальную тему на сервере
+        function syncThemeWithServer() {
+            fetch('{{ route("theme.current") }}', {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        applyTheme(data.theme);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error syncing theme:', error);
+                    // В случае ошибки используем тему из localStorage
+                    const savedTheme = localStorage.getItem('theme');
+                    if (savedTheme) {
+                        applyTheme(savedTheme);
+                    }
+                });
+        }
+
+        // Синхронизируем тему при загрузке страницы
+        syncThemeWithServer();
+
         themeToggle.addEventListener('click', function() {
             // Показываем индикатор загрузки
-            const originalHtml = themeToggle.innerHTML;
-            themeToggle.innerHTML = '⏳';
+            themeToggle.classList.add('loading');
             themeToggle.disabled = true;
 
-            // Отправляем запрос на сервер
+            // Отправляем запрос на сервер для переключения темы
             fetch('{{ route("theme.toggle") }}', {
                 method: 'POST',
                 headers: {
@@ -165,10 +200,7 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        // Меняем тему на странице
-                        htmlElement.setAttribute('data-bs-theme', data.theme);
-
-                        // Показываем уведомление
+                        applyTheme(data.theme);
                         showFlashMessage(data.message, 'success');
                     } else {
                         showFlashMessage(data.message, 'danger');
@@ -179,13 +211,15 @@
                     showFlashMessage('Ошибка при смене темы', 'danger');
                 })
                 .finally(() => {
-                    // Восстанавливаем кнопку
-                    themeToggle.innerHTML = originalHtml;
+                    themeToggle.classList.remove('loading');
                     themeToggle.disabled = false;
                 });
         });
 
         function showFlashMessage(message, type) {
+            const oldMessages = document.querySelectorAll('.flash-message');
+            oldMessages.forEach(msg => msg.remove());
+
             const flashDiv = document.createElement('div');
             flashDiv.className = `flash-message alert alert-${type} alert-dismissible fade show`;
             flashDiv.innerHTML = `
@@ -195,10 +229,10 @@
 
             document.body.appendChild(flashDiv);
 
-            // Автоматически удаляем через 5 секунд
             setTimeout(() => {
                 if (flashDiv.parentNode) {
-                    flashDiv.remove();
+                    const bsAlert = new bootstrap.Alert(flashDiv);
+                    bsAlert.close();
                 }
             }, 5000);
         }
