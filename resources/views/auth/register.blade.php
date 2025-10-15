@@ -12,10 +12,34 @@
                     @csrf
 
                     <div class="mb-3">
-                        <label for="name" class="form-label">Имя</label>
+                        <label for="name" class="form-label">Логин</label>
                         <input type="text" class="form-control @error('name') is-invalid @enderror"
                                id="name" name="name" value="{{ old('name') }}" required autofocus>
                         @error('name')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="last_name" class="form-label">Фамилия</label>
+                        <input type="text" class="form-control @error('last_name') is-invalid @enderror"  id="last_name" name="last_name" value="{{ old('last_name') }}" required>
+                        @error('last_name')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="first_name" class="form-label">Имя</label>
+                        <input type="text" class="form-control @error('first_name') is-invalid @enderror" id="first_name" name="first_name" value="{{ old('first_name') }}" required>
+                        @error('first_name')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="middle_name" class="form-label">Отчество</label>
+                        <input type="text" class="form-control @error('middle_name') is-invalid @enderror" id="middle_name" name="middle_name" value="{{ old('middle_name') }}">
+                        @error('middle_name')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>

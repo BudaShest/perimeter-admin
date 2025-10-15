@@ -21,10 +21,13 @@
 
                     <div class="row mt-4">
                         <div class="col-md-6">
-                            <div class="card bg-light">
+                            <div class="card">
                                 <div class="card-body">
                                     <h5>📊 Информация о пользователе</h5>
-                                    <p><strong>Имя:</strong> {{ Auth::user()->name }}</p>
+                                    <p><strong>Логин:</strong> {{ Auth::user()->name }}</p>
+                                    <p><strong>Имя:</strong> {{ Auth::user()->first_name }}</p>
+                                    <p><strong>Фамилия:</strong> {{ Auth::user()->last_name }}</p>
+                                    <p><strong>Отчество:</strong> {{ Auth::user()->middle_name }}</p>
                                     <p><strong>Email:</strong> {{ Auth::user()->email }}</p>
                                     <p><strong>Тема:</strong> {{ Auth::user()->theme === 'dark' ? 'Тёмная' : 'Светлая' }}</p>
                                     <p><strong>Дата регистрации:</strong> {{ Auth::user()->created_at->format('d.m.Y') }}</p>
@@ -32,7 +35,7 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="card bg-light">
+                            <div class="card">
                                 <div class="card-body">
                                     <h5>⚡ Действия</h5>
                                     <div class="d-grid gap-2">

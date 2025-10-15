@@ -17,12 +17,15 @@ class AuthController extends Controller
     }
 
     // Обработка регистрации
-    public function register(Request $request)
+    public function register(Request $request) //todo special request
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'middle_name' => 'nullable|string|max:255',
         ]);
 
         if ($validator->fails()) {
@@ -35,6 +38,9 @@ class AuthController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'middle_name' => $request->middle_name,
         ]);
 
         Auth::login($user);
