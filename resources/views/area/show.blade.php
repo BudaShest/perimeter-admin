@@ -21,7 +21,7 @@ use App\Models\Area;
         <div class="main-content p-2">
             <h1>Объект "{{ $area->name }}"</h1>
 
-            <table class="table">
+            <table class="table m-2">
                 <tbody>
                 <tr>
                     <th scope="row">Действия</th>
@@ -77,7 +77,7 @@ use App\Models\Area;
                 </tbody>
             </table>
 
-            <div>
+            <div class="m-2">
                 <nav>
                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
                         <button
@@ -138,6 +138,9 @@ use App\Models\Area;
                                 <th scope="row">
                                     UID Карты
                                 </th>
+                                <th>
+                                    Действия
+                                </th>
                             </tr>
                             </thead>
                             <tbody>
@@ -148,6 +151,15 @@ use App\Models\Area;
                                     </td>
                                     <td>
                                         {{ $point->uid }}
+                                    </td>
+                                    <td>
+                                        <form method="post" action="/point/{{ $point->id }}/unlink-area/{{ $area->id }}">
+                                            @method('DELETE')
+                                            @csrf
+                                            <button onclick="return confirm('Вы уверены что хотите отвязать точку?')" class="btn btn-danger" title="Отвязать">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
                                     </td>
                                 </tr>
                             @endforeach

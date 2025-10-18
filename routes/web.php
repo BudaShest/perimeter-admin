@@ -38,6 +38,7 @@ Route::controller(DepartmentController::class)->group(function () {
 Route::controller(PointController::class)->group(function () {
 //    Route::get("/point", "index");
     Route::post("/point", "store");
+    Route::delete("/point/{id}/unlink-area/{area_id}", "unlinkArea");
 });
 
 Route::controller(PatrolController::class)->group(function () {

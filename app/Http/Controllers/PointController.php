@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StorePointRequest;
 use App\Http\Requests\UpdatePointRequest;
+use App\Models\Area;
 use App\Models\Point;
 use Illuminate\Support\Facades\Response;
 
@@ -67,5 +68,20 @@ class PointController extends Controller
     public function destroy(Point $point)
     {
         //
+    }
+
+    public function unlinkArea(int $pointID, int $areaID) {
+        /** @var Point $point */
+        $point = Point::where([
+            'id' => $pointID
+        ])->firstOrFail();
+
+        $area = Area::where([
+            'id' => $areaID
+        ])->firstOrFail();
+
+        $point->areas()->detach($area);
+
+        return redirect()->back();
     }
 }
