@@ -18,8 +18,8 @@ use App\Models\Area;
             </ol>
         </nav>
 
-        <div class="main-content">
-            <h1>Объект {{ $area->name }}</h1>
+        <div class="main-content p-2">
+            <h1>Объект "{{ $area->name }}"</h1>
 
             <table class="table">
                 <tbody>

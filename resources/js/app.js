@@ -1,6 +1,7 @@
 import './bootstrap';
 
 import 'bootstrap';
+import TomSelect from "tom-select";
 
 // Инициализация компонентов Bootstrap
 document.addEventListener('DOMContentLoaded', function() {
@@ -43,6 +44,10 @@ document.addEventListener('DOMContentLoaded', function() {
             targetDiv.after(dragged)
         })
 
+    });
+
+    new TomSelect("#areasSelect",{
+        maxItems: 3
     });
 });
 

@@ -21,6 +21,7 @@ Route::controller(AreaController::class)->group(function () {
     Route::get("/area/{id}/edit", "edit");
     Route::put("/area/{id}", "update");
     Route::delete("/area/{id}", "destroy");
+    Route::delete("/area/{id}/unlink-department", "unlinkDepartment");
 });
 
 Route::controller(DepartmentController::class)->group(function () {
@@ -31,6 +32,7 @@ Route::controller(DepartmentController::class)->group(function () {
    Route::get("/department/{id}/edit", "edit");
    Route::put("/department/{id}", "update");
    Route::delete("/department/{id}", "destroy");
+   Route::post("/department/{id}/link-areas", "linkAreas");
 });
 
 Route::controller(PointController::class)->group(function () {

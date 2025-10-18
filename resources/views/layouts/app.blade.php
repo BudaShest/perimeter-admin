@@ -17,6 +17,10 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     @endif
 
+    <link href="https://cdn.jsdelivr.net/npm/tom-select@2.4.3/dist/css/tom-select.css" rel="stylesheet">
+
+    @livewireStyles
+
     <style>
         .navbar-brand { font-weight: bold; }
         .auth-container { max-width: 400px; margin: 100px auto; }
@@ -238,5 +242,6 @@
         }
     });
 </script>
+@livewireScripts
 </body>
 </html>

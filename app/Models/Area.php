@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property int $id
+ * @property int $department_id
  * @property string $name
  * @property string $description
  * @property string $image
@@ -42,5 +43,9 @@ final class Area extends Model
 
     public function phones(): BelongsToMany {
         return $this->belongsToMany(Phone::class, 'area_phone');
+    }
+
+    public function unlinkDepartment(): void {
+        $this->department_id = null;
     }
 }

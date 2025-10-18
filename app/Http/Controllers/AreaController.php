@@ -93,4 +93,16 @@ class AreaController extends Controller
 
         return redirect()->back();
     }
+
+    public function unlinkDepartment(int $areaID) {
+        $area = Area::where([
+            'id' => $areaID
+        ])->firstOrFail();
+
+        $area->unlinkDepartment();
+
+        $area->saveOrFail();
+
+        return redirect()->back();
+    }
 }

@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreDepartmentRequest;
 use App\Http\Requests\UpdateDepartmentRequest;
+use App\Models\Area;
 use App\Models\Department;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\View;
+use Illuminate\Http\Request;
 
 
 class DepartmentController extends Controller
@@ -49,8 +51,12 @@ class DepartmentController extends Controller
             'id' => $departmentID
         ])->firstOrFail();
 
+        $areas = Area::whereNotIn('id', $department->areas->pluck('id'))->get();
+
+
         return View::make('department.show', [
-            'department' => $department
+            'department' => $department,
+            'areas' => $areas
         ]);
     }
 
@@ -95,5 +101,19 @@ class DepartmentController extends Controller
         $department->delete();
 
         return Response::redirectTo('department');
+    }
+
+    public function linkAreas(Request $request, int $departmentID) {
+        //todo validation
+
+        $department = Department::where([
+            'id' => $departmentID
+        ])->firstOrFail();
+
+        $areas = Area::whereIn('id', $request->areas)->get();
+
+        $department->areas()->saveMany($areas);
+
+        return redirect()->back();
     }
 }
