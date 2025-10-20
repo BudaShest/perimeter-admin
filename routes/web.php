@@ -7,6 +7,7 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\PatrolController;
 use App\Http\Controllers\PointController;
 use App\Http\Controllers\ThemeController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -22,6 +23,8 @@ Route::controller(AreaController::class)->group(function () {
     Route::put("/area/{id}", "update");
     Route::delete("/area/{id}", "destroy");
     Route::delete("/area/{id}/unlink-department", "unlinkDepartment");
+
+    Route::post("/area/{id}/link-users", "linkUsers");
 });
 
 Route::controller(DepartmentController::class)->group(function () {
@@ -39,10 +42,16 @@ Route::controller(PointController::class)->group(function () {
 //    Route::get("/point", "index");
     Route::post("/point", "store");
     Route::delete("/point/{id}/unlink-area/{area_id}", "unlinkArea");
+    Route::post("/point/store-and-link/{areaID}", "storeAndLink");
 });
 
 Route::controller(PatrolController::class)->group(function () {
     Route::get("/patrol", "index");
+});
+
+Route::controller(UserController::class)->group(function () {
+    Route::delete('/user/{id}/unlink-area/{area_id}', "unlinkArea");
+
 });
 
 // todo autogeenrated stuff

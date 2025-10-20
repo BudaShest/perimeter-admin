@@ -1,7 +1,9 @@
 @php
 use App\Models\Area;
+use App\Models\User;
 
 /** @var Area $area */
+/** @var Users[] $allUsers */
 @endphp
 
 @extends('layouts.app')
@@ -113,8 +115,8 @@ use App\Models\Area;
                 </nav>
 
                 <div class="tab-content" id="nav-tabContent">
-                    <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-                        <form class="row" method="post" action="/point">
+                    <div class="tab-pane fade show active pt-3" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                        <form class="row" method="post" action="/point/store-and-link/{{ $area->id }}/">
                             @csrf
                             <div class="mb-3 col">
                                 <label class="form-label" for="">Название</label>
@@ -125,7 +127,7 @@ use App\Models\Area;
                                 <input name="uid" class="form-control" type="text">
                             </div>
                             <div class="mb-3 col align-content-end">
-                                <button type="submit" class="btn btn-primary">Привязать</button>
+                                <button type="submit" class="btn btn-primary"><i class="bi bi-plus-circle-fill"></i></button>
                             </div>
                         </form>
 
@@ -167,14 +169,14 @@ use App\Models\Area;
                         </table>
                     </div>
 
-                    <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                    <div class="tab-pane fade pt-3" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
                         <button class="btn btn-secondary">
                             Создать маршрут
                         </button>
 
                         <div class="sortable-container" id="sortableContainer">
                             @foreach($area->points as $point)
-                                <div draggable="true" class="sortable-item">
+                                <div draggable="true" class="card sortable-item">
                                     {{ $point->name }}
                                 </div>
                             @endforeach
@@ -247,23 +249,52 @@ use App\Models\Area;
                         </div>
                     </div>
 
-                    <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                <th>Логин</th>
-                                <th>Действия</th>
-                            </tr>
-                            </thead>
-                            <tbody>
+                    <div class="tab-pane fade pt-3" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
+                        <div class="row">
+                            <form class="row align-items-end pt-2" method="post" action="/area/{{ $area->id }}/link-users">
+                                @csrf
+                                <div class="col">
+                                    <label for="usersSelect" class="form-label">Выберите пользователей</label>
+                                    <select name="users[]" id="usersSelect" multiple class="form-select" placeholder="Выберите пользователей">
+                                        @foreach($allUsers as $user)
+                                            <option value="{{ $user->id }}">
+                                                {{ $user->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col">
+                                    <button class="btn btn-primary">
+                                        <i class="bi bi-plus-circle-fill"></i>
+                                    </button>
+                                </div>
+                            </form>
+
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>Логин</th>
+                                    <th>Действия</th>
+                                </tr>
+                                </thead>
+                                <tbody>
                                 @foreach($area->users as $user)
                                     <tr>
                                         <td>{{ $user->name }}</td>
-                                        <td></td>
+                                        <td>
+                                            <form action="/user/{{ $user->id }}/unlink-area/{{ $area->id }}" method="post">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button class="btn btn-danger" onclick="return confirm('Вы уверены, что хотите отвязать пользователя')">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </form>
+                                        </td>
                                     </tr>
                                 @endforeach
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>

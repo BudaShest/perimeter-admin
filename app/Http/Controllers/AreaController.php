@@ -5,15 +5,19 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreAreaRequest;
 use App\Http\Requests\UpdateAreaRequest;
 use App\Models\Area;
+use App\Models\Point;
+use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\View;
+use Illuminate\Contracts\View\View as ViewContract;
 
 class AreaController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): ViewContract
     {
         return View::make('area.index', [
             'areas' => Area::all()
@@ -23,7 +27,7 @@ class AreaController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): ViewContract
     {
         return View::make('area.create');
     }
@@ -41,21 +45,24 @@ class AreaController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(int $areaID)
+    public function show(int $areaID): ViewContract
     {
         $area = Area::where([
             'id' => $areaID
         ])->firstOrFail();
 
+        $users = User::whereNotIn('id', $area->users->pluck('id'))->get();
+
         return View::make('area.show', [
-            'area' => $area
+            'area' => $area,
+            'allUsers' => $users,
         ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(int $areaID)
+    public function edit(int $areaID): ViewContract
     {
         $area = Area::where([
             'id' => $areaID
@@ -102,6 +109,21 @@ class AreaController extends Controller
         $area->unlinkDepartment();
 
         $area->saveOrFail();
+
+        return redirect()->back();
+    }
+
+    public function linkUsers(Request $request, int $areaID) {
+        //todo validate
+        $userIDs = $request->users;
+
+        $area = Area::where([
+            'id' => $areaID
+        ])->firstOrFail();
+
+        $users = User::whereIn('id', $userIDs)->get();
+
+        $area->users()->attach($users);
 
         return redirect()->back();
     }

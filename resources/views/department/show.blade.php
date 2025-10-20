@@ -58,11 +58,11 @@ use App\Models\Department;
             <div class="container departments-areas p-2">
                 <h2>Объекты</h2>
 
-                <form class="row align-items-end" method="post" action="/department/{{$department->id}}/link-areas">
+                <form class="row align-items-end pt-2" method="post" action="/department/{{$department->id}}/link-areas">
                     @csrf
-                    <div class="col-3">
-                        <label for="areasSelect" class="form-label">Выберите пользователей:</label>
-                        <select id="areasSelect" class="form-select" name="areas[]" multiple placeholder="Выберите подразделения...">
+                    <div class="col-md-3">
+                        <label for="areasSelect" class="form-label">Выберите объекты:</label>
+                        <select id="areasSelect" class="form-select" name="areas[]" multiple placeholder="Выберите объекты...">
                             @foreach($areas as $area)
                                 <option value="{{ $area->id }}">
                                     {{ $area->name }}
@@ -71,7 +71,7 @@ use App\Models\Department;
                         </select>
                     </div>
                     <div class="col-3">
-                        <button class="btn btn-primary">Привязать</button>
+                        <button class="btn btn-primary">+</button>
                     </div>
                 </form>
 

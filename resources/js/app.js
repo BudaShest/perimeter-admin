@@ -46,9 +46,28 @@ document.addEventListener('DOMContentLoaded', function() {
 
     });
 
-    new TomSelect("#areasSelect",{
-        maxItems: 3
-    });
+    const areasSelectEl = document.getElementById('areasSelect');
+    const usersSelectEl = document.getElementById('usersSelect');
+
+    console.log('areasSelect element:', areasSelectEl);
+    console.log('usersSelect element:', usersSelectEl);
+
+    if (areasSelectEl) {
+        let areasSelect = new TomSelect("#areasSelect", {
+            maxItems: 3
+        });
+    } else {
+        console.error('Element #areasSelect not found');
+    }
+
+    if (usersSelectEl) {
+        let userSelect = new TomSelect("#usersSelect", {
+            maxItems: 3
+        });
+    } else {
+        console.error('Element #usersSelect not found');
+    }
+
 });
 
 // Обработчики для Livewire (если используется)

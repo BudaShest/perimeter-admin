@@ -31,4 +31,5 @@ class Point extends Model
         return $this->belongsToMany(Area::class, 'area_points');
     }
 
+
 }

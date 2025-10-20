@@ -21,6 +21,8 @@
 
     @livewireStyles
 
+    @stack('scripts')
+
     <style>
         .navbar-brand { font-weight: bold; }
         .auth-container { max-width: 400px; margin: 100px auto; }
@@ -136,7 +138,7 @@
 <footer class="site-footer">
     <div class="container">
         <div class="row">
-            <ul class="list-group col-3">
+            <ul class="list-group col-md-3">
                 <li class="list-group-item">
                     <a href="">budashest@gmail.com</a>
                 </li>

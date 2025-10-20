@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreAndLinkPointRequest;
 use App\Http\Requests\StorePointRequest;
 use App\Http\Requests\UpdatePointRequest;
 use App\Models\Area;
 use App\Models\Point;
+use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 
 class PointController extends Controller
@@ -36,6 +39,22 @@ class PointController extends Controller
         $newPoint->save();
 
         return Response::redirectTo('department/');
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function storeAndLink(StoreAndLinkPointRequest $request, int $areaID)
+    {
+        $newPoint = new Point();
+        $newPoint->fill($request->all());
+        $newPoint->save();
+
+        $area = Area::where(['id' => $request->areaID])->firstOrFail();
+
+        $area->points()->save($newPoint);
+
+        return redirect()->back();
     }
 
     /**
