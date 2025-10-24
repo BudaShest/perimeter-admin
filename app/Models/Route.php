@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property int $id
@@ -18,6 +20,16 @@ final class Route extends Model
     /** @var string */
     protected $primaryKey = "id";
     /** @var string[] */
-    protected $fillable = ["id", "name", "area_id",];
+    protected $fillable = ["name", "area_id"];
+
+    public function area(): BelongsTo
+    {
+        return $this->belongsTo(Area::class);
+    }
+
+    public function routeVersions(): HasMany
+    {
+        return $this->hasMany(RouteVersion::class);
+    }
 
 }

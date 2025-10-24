@@ -54,7 +54,9 @@ Route::controller(UserController::class)->group(function () {
 
 });
 
-// todo autogeenrated stuff
+Route::controller(\App\Http\Controllers\RouteController::class)->group(function () {
+    Route::post("/route/save-order", "saveOrder");
+});
 
 Route::get('/info', function () {
     Log::info('Phpinfo page visited');
@@ -80,6 +82,7 @@ Route::middleware('auth')->group(function () {
         return view('dashboard');
     })->name('dashboard');
 });
+
 
 // Главная страница (доступна всем)
 Route::get('/', function () {

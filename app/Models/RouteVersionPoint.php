@@ -20,10 +20,18 @@ class RouteVersionPoint extends Model
     protected $primaryKey = "id";
     /** @var string[] */
     protected $fillable = [
-        "id",
         "route_version_id",
         "point_id",
         "step_order",
     ];
 
+    public function routeVersion(): BelongsTo
+    {
+        return $this->belongsTo(RouteVersion::class);
+    }
+
+    public function point(): BelongsTo
+    {
+        return $this->belongsTo(Point::class);
+    }
 }

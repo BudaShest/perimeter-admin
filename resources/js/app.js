@@ -83,183 +83,128 @@ document.addEventListener('livewire:load', function() {
 class SortableList {
     constructor(container) {
         this.container = container;
-        this.items = Array.from(container.querySelectorAll('.sortable-item'));
+        this.items = container.querySelectorAll('.sortable-item');
         this.draggedItem = null;
-        this.dragStartIndex = null;
-
         this.init();
     }
 
     init() {
         this.items.forEach(item => {
-            item.addEventListener('dragstart', this.handleDragStart.bind(this));
-            item.addEventListener('dragover', this.handleDragOver.bind(this));
-            item.addEventListener('dragenter', this.handleDragEnter.bind(this));
-            item.addEventListener('dragleave', this.handleDragLeave.bind(this));
-            item.addEventListener('drop', this.handleDrop.bind(this));
-            item.addEventListener('dragend', this.handleDragEnd.bind(this));
+            // Используем стрелочные функции или bind для сохранения контекста
+            item.addEventListener('dragstart', (e) => this.handleDragStart(e));
+            item.addEventListener('dragend', (e) => this.handleDragEnd(e));
+            item.addEventListener('dragover', (e) => this.handleDragOver(e));
+            item.addEventListener('dragenter', (e) => this.handleDragEnter(e));
+            item.addEventListener('dragleave', (e) => this.handleDragLeave(e));
+            item.addEventListener('drop', (e) => this.handleDrop(e));
         });
     }
 
     handleDragStart(e) {
         this.draggedItem = e.target;
-        this.dragStartIndex = this.items.indexOf(this.draggedItem);
+        setTimeout(() => this.draggedItem.style.opacity = '0.4', 0);
+    }
 
-        e.dataTransfer.effectAllowed = 'move';
-        e.dataTransfer.setData('text/html', this.draggedItem.innerHTML);
-
-        // Добавляем класс для визуального эффекта
-        setTimeout(() => {
-            this.draggedItem.classList.add('dragging');
-        }, 0);
+    handleDragEnd(e) {
+        this.draggedItem.style.opacity = '1';
+        this.items.forEach(item => item.classList.remove('over'));
     }
 
     handleDragOver(e) {
         e.preventDefault();
-        e.dataTransfer.dropEffect = 'move';
-        return false;
     }
 
     handleDragEnter(e) {
         e.preventDefault();
-        const target = e.target.closest('.sortable-item');
-        if (target && target !== this.draggedItem) {
-            target.classList.add('over');
-        }
+        e.target.classList.add('over');
     }
 
     handleDragLeave(e) {
-        const target = e.target.closest('.sortable-item');
-        if (target && target !== this.draggedItem) {
-            target.classList.remove('over');
-        }
+        e.target.classList.remove('over');
     }
 
     handleDrop(e) {
         e.preventDefault();
-        e.stopPropagation();
+        e.target.classList.remove('over');
 
-        const target = e.target.closest('.sortable-item');
-        if (target && target !== this.draggedItem) {
-            const dragEndIndex = this.items.indexOf(target);
+        if (e.target !== this.draggedItem) {
+            const allItems = Array.from(this.container.querySelectorAll('.sortable-item'));
+            const thisIndex = allItems.indexOf(e.target);
+            const draggedIndex = allItems.indexOf(this.draggedItem);
 
-            // Определяем направление перемещения
-            if (this.dragStartIndex < dragEndIndex) {
-                target.after(this.draggedItem);
+            if (draggedIndex < thisIndex) {
+                e.target.after(this.draggedItem);
             } else {
-                target.before(this.draggedItem);
+                e.target.before(this.draggedItem);
             }
-
-            // Обновляем порядок номеров
-            this.updateItemNumbers();
-
-            // Вызываем пользовательское событие
-            this.triggerReorderEvent();
         }
-
-        return false;
     }
 
-    handleDragEnd(e) {
-        // Убираем все классы
-        this.items.forEach(item => {
-            item.classList.remove('dragging');
-            item.classList.remove('over');
+    // Получить текущий порядок точек
+    getPointOrder() {
+        const items = this.container.querySelectorAll('.sortable-item');
+        return Array.from(items).map(item => item.dataset.pointId);
+    }
+
+    // Обновить скрытые inputs
+    updateHiddenInputs() {
+        const pointOrder = this.getPointOrder();
+        const hiddenInputs = document.querySelectorAll('input[name="point_order[]"]');
+
+        hiddenInputs.forEach((input, index) => {
+            input.value = pointOrder[index];
         });
-
-        this.draggedItem = null;
-        this.dragStartIndex = null;
-    }
-
-    updateItemNumbers() {
-        // Обновляем массив элементов
-        this.items = Array.from(this.container.querySelectorAll('.sortable-item'));
-
-        // Обновляем номера
-        this.items.forEach((item, index) => {
-            const numberElement = item.querySelector('.item-number');
-            if (numberElement) {
-                numberElement.textContent = index + 1;
-            }
-            // Можно также обновить data-атрибуты если нужно
-            item.setAttribute('data-order', index + 1);
-        });
-    }
-
-    triggerReorderEvent() {
-        const event = new CustomEvent('itemsReordered', {
-            detail: {
-                items: this.items.map(item => ({
-                    id: item.getAttribute('data-id'),
-                    order: this.items.indexOf(item) + 1,
-                    text: item.textContent.trim()
-                }))
-            }
-        });
-        this.container.dispatchEvent(event);
-    }
-
-    // Метод для получения текущего порядка
-    getCurrentOrder() {
-        return this.items.map(item => ({
-            id: item.getAttribute('data-id'),
-            order: this.items.indexOf(item) + 1,
-            element: item
-        }));
-    }
-
-    // Метод для добавления нового элемента
-    addItem(text, id = null) {
-        const newItem = document.createElement('div');
-        newItem.className = 'sortable-item';
-        newItem.draggable = true;
-        newItem.setAttribute('data-id', id || Date.now());
-
-        const itemNumber = document.createElement('span');
-        itemNumber.className = 'item-number';
-        itemNumber.textContent = this.items.length + 1;
-
-        newItem.appendChild(itemNumber);
-        newItem.appendChild(document.createTextNode(' ' + text));
-
-        // Добавляем обработчики событий
-        newItem.addEventListener('dragstart', this.handleDragStart.bind(this));
-        newItem.addEventListener('dragover', this.handleDragOver.bind(this));
-        newItem.addEventListener('dragenter', this.handleDragEnter.bind(this));
-        newItem.addEventListener('dragleave', this.handleDragLeave.bind(this));
-        newItem.addEventListener('drop', this.handleDrop.bind(this));
-        newItem.addEventListener('dragend', this.handleDragEnd.bind(this));
-
-        this.container.appendChild(newItem);
-        this.items.push(newItem);
-    }
-
-    // Метод для удаления элемента
-    removeItem(item) {
-        if (this.items.includes(item)) {
-            item.remove();
-            this.items = this.items.filter(i => i !== item);
-            this.updateItemNumbers();
-        }
     }
 }
 
-// Инициализация
+// Использование
 document.addEventListener('DOMContentLoaded', function() {
-    const container = document.getElementById('sortableContainer');
-    const sortableList = new SortableList(container);
+    const sortableContainer = document.querySelector('.sortable-list');
 
-    // Пример использования события переупорядочивания
-    container.addEventListener('itemsReordered', function(e) {
-        console.log('Порядок изменен:', e.detail.items);
+    if (sortableContainer) {
+        const sortableList = new SortableList(sortableContainer);
+        const saveButton = document.getElementById('saveRoute');
+        const saveStatus = document.getElementById('saveStatus');
 
-        // Здесь можно отправить данные на сервер
-        // saveOrderToServer(e.detail.items);
-    });
+        // Обработчик сохранения
+        if (saveButton) {
+            saveButton.addEventListener('click', function() {
+                // Обновляем скрытые inputs перед отправкой
+                sortableList.updateHiddenInputs();
+                savePointOrder();
+            });
+        }
 
-    // Пример добавления нового элемента
-    // sortableList.addItem('Новый элемент', 'new-id');
+        function savePointOrder() {
+            if (!saveStatus) return;
 
-    // Пример получения текущего порядка
-    // console.log(sortableList.getCurrentOrder());
+            saveStatus.textContent = 'Сохранение...';
+            saveStatus.className = 'ms-2 text-warning';
+
+            const formData = new FormData(document.getElementById('sortableContainer'));
+
+            fetch('/route/save-order', {  // Замените на ваш URL
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value,
+                    'Accept': 'application/json'
+                },
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        saveStatus.textContent = '✓ Сохранено';
+                        saveStatus.className = 'ms-2 text-success';
+                        setTimeout(() => saveStatus.textContent = '', 3000);
+                    } else {
+                        throw new Error(data.message);
+                    }
+                })
+                .catch(error => {
+                    saveStatus.textContent = '✗ Ошибка: ' + error.message;
+                    saveStatus.className = 'ms-2 text-danger';
+                });
+        }
+    }
 });

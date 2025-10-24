@@ -174,79 +174,127 @@ use App\Models\User;
                             Создать маршрут
                         </button>
 
-                        <div class="sortable-container" id="sortableContainer">
-                            @foreach($area->points as $point)
-                                <div draggable="true" class="card sortable-item">
-                                    {{ $point->name }}
+                        <form class="sortable-container" id="sortableContainer">
+                            @csrf
+                            <input type="hidden" name="area_id" value="{{ $area->id }}">
+                            <input type="hidden" name="route_version_id" value="{{ $routeVersion->id ?? '' }}">
+
+                            <div class="sortable-list">
+                                @foreach($area->points as $point)
+                                    <div class="sortable-item card row" draggable="true" data-point-id="{{ $point->id }}">
+                                        <input type="text" class="form-control" value="{{ $point->name }}" readonly>
+                                        <input type="hidden" name="point_order[]" value="{{ $point->id }}">
+                                    </div>
+                                @endforeach
+                            </div>
+
+                            <div class="mb-3 mt-3">
+                                <button type="button" class="btn btn-primary" id="saveRoute">Сохранить порядок</button>
+                                <span id="saveStatus" class="ms-2"></span>
+                            </div>
+                        </form>
+
+                        <div class="accordion pt-2" id="routesAccordion">
+                            @forelse($area->routes as $index => $route)
+                                @php
+                                    $activeVersion = $route->routeVersions->where('is_active', true)->first()
+                                                   ?? $route->routeVersions->sortByDesc('version')->first();
+                                @endphp
+
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="heading{{ $route->id }}">
+                                        <button class="accordion-button {{ $index > 0 ? 'collapsed' : '' }}"
+                                                type="button"
+                                                data-bs-toggle="collapse"
+                                                data-bs-target="#collapse{{ $route->id }}"
+                                                aria-expanded="{{ $index === 0 ? 'true' : 'false' }}"
+                                                aria-controls="collapse{{ $route->id }}">
+                                            🗺️ Маршрут: {{ $route->name }}
+                                            <span class="badge bg-secondary ms-2">
+                        Версия {{ $activeVersion->version ?? '1' }}
+                    </span>
+                                            @if($activeVersion->is_active ?? false)
+                                                <span class="badge bg-success ms-1">Активна</span>
+                                            @else
+                                                <span class="badge bg-warning ms-1">Неактивна</span>
+                                            @endif
+                                        </button>
+                                    </h2>
+                                    <div id="collapse{{ $route->id }}"
+                                         class="accordion-collapse collapse {{ $index === 0 ? 'show' : '' }}"
+                                         aria-labelledby="heading{{ $route->id }}"
+                                         data-bs-parent="#routesAccordion">
+                                        <div class="accordion-body">
+                                            @if($activeVersion && $activeVersion->points->count() > 0)
+                                                <div class="mb-3">
+                                                    <h6>Точки маршрута ({{ $activeVersion->points->count() }}):</h6>
+                                                    <div class="list-group">
+                                                        @foreach($activeVersion->points as $point)
+                                                            <div class="list-group-item d-flex justify-content-between align-items-center">
+                                                                <div>
+                                                                    <span class="badge bg-primary me-2">{{ $loop->iteration }}</span>
+                                                                    {{ $point->name }}
+                                                                </div>
+                                                                <small class="text-muted">UID: {{ $point->uid }}</small>
+                                                            </div>
+                                                        @endforeach
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <strong>Дата создания:</strong>
+                                                        {{ $activeVersion->created_at }}
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        @if($activeVersion->valid_from)
+                                                            <strong>Действует с:</strong>
+                                                            {{ $activeVersion->valid_from }}
+                                                        @endif
+                                                        @if($activeVersion->valid_to)
+                                                            <br><strong>Действует до:</strong>
+                                                            {{ $activeVersion->valid_to }}
+                                                        @endif
+                                                    </div>
+                                                </div>
+
+                                                <div class="mt-3">
+                                                    <button class="btn btn-outline-primary btn-sm me-2"
+                                                            onclick="editRoute({{ $route->id }})">
+                                                        ✏️ Редактировать
+                                                    </button>
+                                                    <button class="btn btn-outline-success btn-sm me-2"
+                                                            onclick="createNewVersion({{ $route->id }})">
+                                                        🆕 Новая версия
+                                                    </button>
+                                                    <button class="btn btn-outline-danger btn-sm"
+                                                            onclick="deleteRoute({{ $route->id }})">
+                                                        🗑️ Удалить
+                                                    </button>
+                                                </div>
+                                            @else
+                                                <div class="alert alert-warning">
+                                                    <p class="mb-0">В этом маршруте пока нет точек.</p>
+                                                    <button class="btn btn-primary btn-sm mt-2"
+                                                            onclick="editRoute({{ $route->id }})">
+                                                        Добавить точки
+                                                    </button>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
                                 </div>
-                            @endforeach
+                            @empty
+                                <div class="alert alert-info">
+                                    <h6>Маршруты не найдены</h6>
+                                    <p class="mb-0">Для этой зоны ещё не создано ни одного маршрута.</p>
+                                    <button class="btn btn-primary btn-sm mt-2" id="createFirstRoute">
+                                        Создать первый маршрут
+                                    </button>
+                                </div>
+                            @endforelse
                         </div>
 
-                        <div class="accordion pt-2" id="accordionExample">
-                            <div class="accordion-item">
-                                <h2 class="accordion-header" id="headingOne">
-                                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                            data-bs-target="#collapseOne" aria-expanded="true"
-                                            aria-controls="collapseOne">
-                                        Accordion Item #1
-                                    </button>
-                                </h2>
-                                <div id="collapseOne" class="accordion-collapse collapse show"
-                                     aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                                    <div class="accordion-body">
-                                        <strong>This is the first item's accordion body.</strong> It is shown by
-                                        default, until the collapse plugin adds the appropriate classes that we use to
-                                        style each element. These classes control the overall appearance, as well as the
-                                        showing and hiding via CSS transitions. You can modify any of this with custom
-                                        CSS or overriding our default variables. It's also worth noting that just about
-                                        any HTML can go within the <code>.accordion-body</code>, though the transition
-                                        does limit overflow.
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="accordion-item">
-                                <h2 class="accordion-header" id="headingTwo">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                            data-bs-target="#collapseTwo" aria-expanded="false"
-                                            aria-controls="collapseTwo">
-                                        Accordion Item #2
-                                    </button>
-                                </h2>
-                                <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
-                                     data-bs-parent="#accordionExample">
-                                    <div class="accordion-body">
-                                        <strong>This is the second item's accordion body.</strong> It is hidden by
-                                        default, until the collapse plugin adds the appropriate classes that we use to
-                                        style each element. These classes control the overall appearance, as well as the
-                                        showing and hiding via CSS transitions. You can modify any of this with custom
-                                        CSS or overriding our default variables. It's also worth noting that just about
-                                        any HTML can go within the <code>.accordion-body</code>, though the transition
-                                        does limit overflow.
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="accordion-item">
-                                <h2 class="accordion-header" id="headingThree">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                            data-bs-target="#collapseThree" aria-expanded="false"
-                                            aria-controls="collapseThree">
-                                        Accordion Item #3
-                                    </button>
-                                </h2>
-                                <div id="collapseThree" class="accordion-collapse collapse"
-                                     aria-labelledby="headingThree" data-bs-parent="#accordionExample">
-                                    <div class="accordion-body">
-                                        <strong>This is the third item's accordion body.</strong> It is hidden by
-                                        default, until the collapse plugin adds the appropriate classes that we use to
-                                        style each element. These classes control the overall appearance, as well as the
-                                        showing and hiding via CSS transitions. You can modify any of this with custom
-                                        CSS or overriding our default variables. It's also worth noting that just about
-                                        any HTML can go within the <code>.accordion-body</code>, though the transition
-                                        does limit overflow.
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
 
                     <div class="tab-pane fade pt-3" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">

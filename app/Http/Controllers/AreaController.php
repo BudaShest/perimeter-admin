@@ -47,9 +47,18 @@ class AreaController extends Controller
      */
     public function show(int $areaID): ViewContract
     {
-        $area = Area::where([
-            'id' => $areaID
-        ])->firstOrFail();
+        $area = Area::with([
+            'routes.routeVersions' => function($query) {
+                $query->where('is_active', true)
+                    ->orWhere(function($q) {
+                        $q->where('is_active', false)
+                            ->orderBy('version', 'desc');
+                    });
+            },
+            'routes.routeVersions.points' => function($query) {
+                $query->orderBy('step_order');
+            }
+        ])->where('id', $areaID)->firstOrFail();
 
         $users = User::whereNotIn('id', $area->users->pluck('id'))->get();
 

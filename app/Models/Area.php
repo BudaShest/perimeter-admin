@@ -45,6 +45,12 @@ final class Area extends Model
         return $this->belongsToMany(Phone::class, 'area_phone');
     }
 
+    // Отношение с маршрутами
+    public function routes(): HasMany
+    {
+        return $this->hasMany(Route::class);
+    }
+
     public function unlinkDepartment(): void {
         $this->department_id = null;
     }
