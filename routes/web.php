@@ -101,12 +101,6 @@ Route::middleware('auth')->group(function () {
     })->name('dashboard');
 });
 
-Route::middleware('auth:sanctum')->group(function () {
-    // API для получения расписаний
-    Route::get('/schedules/today', [ScheduleController::class, 'getTodaySchedules']);
-    Route::get('/schedules/by-date', [ScheduleController::class, 'getSchedulesByDate']);
-});
-
 // Для web интерфейса (в routes/web.php)
 Route::middleware('auth')->group(function () {
     Route::apiResource('routes.schedules', ScheduleController::class)

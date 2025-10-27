@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * @property int $id
@@ -44,12 +45,10 @@ final class Route extends Model
         return $this->schedules()->where('is_active', true);
     }
 
-    // Получить активную версию маршрута
-    public function activeVersion()
+    // Исправляем отношение activeVersion
+    public function activeVersion(): HasOne
     {
-        return $this->routeVersions()
-            ->where('is_active', true)
-            ->first();
+        return $this->hasOne(RouteVersion::class)->where('is_active', true)->latest();
     }
 
     // Получить последнюю версию маршрута

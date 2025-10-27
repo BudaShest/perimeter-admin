@@ -79,7 +79,7 @@ use App\Models\User;
                 </tbody>
             </table>
 
-            <div class="m-2">
+            <div class="m-2 row">
                 <nav>
                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
                         <button

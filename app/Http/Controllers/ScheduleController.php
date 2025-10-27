@@ -127,9 +127,9 @@ class ScheduleController extends Controller
 
             $schedules = Schedule::with(['route.area', 'route.activeVersion.points'])
                 ->where('is_active', true)
-                ->whereJsonContains('days_of_week', $dayOfWeek)
-                ->where('start_time', '<=', $currentTime)
-                ->where('end_time', '>=', $currentTime)
+                ->whereJsonContains('days_of_week', "$dayOfWeek")
+//                ->where('start_time', '<=', $currentTime)
+//                ->where('end_time', '>=', $currentTime)
                 ->get();
 
             return response()->json([
