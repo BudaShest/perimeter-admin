@@ -32,4 +32,31 @@ final class Route extends Model
         return $this->hasMany(RouteVersion::class);
     }
 
+    // Добавляем отношение с расписаниями
+    public function schedules(): HasMany
+    {
+        return $this->hasMany(Schedule::class);
+    }
+
+    // Активные расписания
+    public function activeSchedules()
+    {
+        return $this->schedules()->where('is_active', true);
+    }
+
+    // Получить активную версию маршрута
+    public function activeVersion()
+    {
+        return $this->routeVersions()
+            ->where('is_active', true)
+            ->first();
+    }
+
+    // Получить последнюю версию маршрута
+    public function latestVersion()
+    {
+        return $this->routeVersions()
+            ->orderBy('version', 'desc')
+            ->first();
+    }
 }

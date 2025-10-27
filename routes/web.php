@@ -7,6 +7,7 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\PatrolController;
 use App\Http\Controllers\PointController;
 use App\Http\Controllers\RouteController;
+use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\ThemeController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Cache;
@@ -100,6 +101,17 @@ Route::middleware('auth')->group(function () {
     })->name('dashboard');
 });
 
+Route::middleware('auth:sanctum')->group(function () {
+    // API для получения расписаний
+    Route::get('/schedules/today', [ScheduleController::class, 'getTodaySchedules']);
+    Route::get('/schedules/by-date', [ScheduleController::class, 'getSchedulesByDate']);
+});
+
+// Для web интерфейса (в routes/web.php)
+Route::middleware('auth')->group(function () {
+    Route::apiResource('routes.schedules', ScheduleController::class)
+        ->only(['index', 'store', 'update', 'destroy']);
+});
 
 // Главная страница (доступна всем)
 Route::get('/', function () {

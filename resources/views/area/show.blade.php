@@ -258,6 +258,94 @@ use App\Models\User;
                                                     </div>
                                                 </div>
 
+                                                <!-- НОВЫЙ БЛОК: Расписания обходов -->
+                                                <div class="mt-4 border-top pt-3">
+                                                    <h6>📅 Расписания обходов</h6>
+
+                                                    <!-- Список существующих расписаний -->
+                                                    <div id="schedules-list-{{ $route->id }}">
+                                                        @foreach($route->schedules as $schedule)
+                                                            <div class="card mb-2 schedule-item" data-schedule-id="{{ $schedule->id }}">
+                                                                <div class="card-body py-2">
+                                                                    <div class="d-flex justify-content-between align-items-center">
+                                                                        <div>
+                                                                            <strong>{{ $schedule->name }}</strong>
+                                                                            <br>
+                                                                            <small class="text-muted">
+                                                                                {{ $schedule->days_of_week_text }} | {{ $schedule->time_range }}
+                                                                            </small>
+                                                                        </div>
+                                                                        <div>
+                                                                            @if($schedule->is_active)
+                                                                                <span class="badge bg-success">Активно</span>
+                                                                            @else
+                                                                                <span class="badge bg-secondary">Неактивно</span>
+                                                                            @endif
+                                                                            <button class="btn btn-sm btn-outline-danger ms-2"
+                                                                                    onclick="deleteSchedule({{ $schedule->id }})">
+                                                                                🗑️
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        @endforeach
+                                                    </div>
+
+                                                    <!-- Форма создания нового расписания -->
+                                                    <div class="card mt-3">
+                                                        <div class="card-body">
+                                                            <h6>Добавить расписание</h6>
+                                                            <form id="schedule-form-{{ $route->id }}" class="schedule-form">
+                                                                @csrf
+                                                                <div class="row">
+                                                                    <div class="col-md-4">
+                                                                        <label class="form-label">Название</label>
+                                                                        <input type="text" name="name" class="form-control" placeholder="Утренний обход" required>
+                                                                    </div>
+                                                                    <div class="col-md-3">
+                                                                        <label class="form-label">Время начала</label>
+                                                                        <input type="time" name="start_time" class="form-control" required>
+                                                                    </div>
+                                                                    <div class="col-md-3">
+                                                                        <label class="form-label">Время окончания</label>
+                                                                        <input type="time" name="end_time" class="form-control" required>
+                                                                    </div>
+                                                                    <div class="col-md-2">
+                                                                        <label class="form-label">Активно</label>
+                                                                        <select name="is_active" class="form-select">
+                                                                            <option value="1">Да</option>
+                                                                            <option value="0">Нет</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="row mt-2">
+                                                                    <div class="col-12">
+                                                                        <label class="form-label">Дни недели</label>
+                                                                        <div class="d-flex flex-wrap gap-2">
+                                                                            @foreach([1 => 'Пн', 2 => 'Вт', 3 => 'Ср', 4 => 'Чт', 5 => 'Пт', 6 => 'Сб', 7 => 'Вс'] as $value => $label)
+                                                                                <div class="form-check">
+                                                                                    <input class="form-check-input" type="checkbox"
+                                                                                           name="days_of_week[]" value="{{ $value }}" id="day{{ $value }}_{{ $route->id }}">
+                                                                                    <label class="form-check-label" for="day{{ $value }}_{{ $route->id }}">
+                                                                                        {{ $label }}
+                                                                                    </label>
+                                                                                </div>
+                                                                            @endforeach
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="mt-3">
+                                                                    <button type="submit" class="btn btn-primary btn-sm">Добавить расписание</button>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- КОНЕЦ БЛОКА РАСПИСАНИЙ -->
+
                                                 <div class="mt-3">
                                                     <button class="btn btn-outline-primary btn-sm me-2"
                                                             onclick="editRoute({{ $route->id }})">
@@ -351,14 +439,11 @@ use App\Models\User;
 @endsection;
 
 <script>
-    // Функция для редактирования маршрута
+    // Глобальные функции для работы с маршрутами
     function editRoute(routeId) {
-        // Здесь можно реализовать переход на страницу редактирования
-        // или открыть модальное окно
         window.location.href = `/routes/${routeId}/edit`;
     }
 
-    // Функция для создания новой версии маршрута
     function createNewVersion(routeId) {
         if (confirm('Создать новую версию этого маршрута?')) {
             fetch('{{ route("routes.create-version") }}', {
@@ -376,7 +461,7 @@ use App\Models\User;
                 .then(data => {
                     if (data.success) {
                         alert('Новая версия маршрута создана!');
-                        location.reload(); // Перезагружаем страницу для отображения изменений
+                        location.reload();
                     } else {
                         alert('Ошибка: ' + data.message);
                     }
@@ -388,7 +473,6 @@ use App\Models\User;
         }
     }
 
-    // Функция для удаления маршрута
     function deleteRoute(routeId) {
         if (confirm('Вы уверены, что хотите удалить этот маршрут? Это действие нельзя отменить.')) {
             fetch(`/routes/${routeId}`, {
@@ -414,15 +498,141 @@ use App\Models\User;
         }
     }
 
-    // Обработчик для создания первого маршрута
+    // Глобальные функции для работы с расписаниями
+    function deleteSchedule(scheduleId) {
+        if (confirm('Удалить это расписание?')) {
+            fetch(`/schedules/${scheduleId}`, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value,
+                    'Accept': 'application/json'
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.querySelector(`[data-schedule-id="${scheduleId}"]`).remove();
+                        showAlert('Расписание удалено!', 'success');
+                    } else {
+                        throw new Error(data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showAlert('Ошибка: ' + error.message, 'error');
+                });
+        }
+    }
+
+    // Вспомогательные функции
+    function showAlert(message, type) {
+        const alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
+        const alertDiv = document.createElement('div');
+        alertDiv.className = `alert ${alertClass} alert-dismissible fade show position-fixed`;
+        alertDiv.style.cssText = 'top: 20px; right: 20px; z-index: 1050; min-width: 300px;';
+        alertDiv.innerHTML = `
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+
+        document.body.appendChild(alertDiv);
+
+        setTimeout(() => {
+            if (alertDiv.parentNode) {
+                alertDiv.remove();
+            }
+        }, 3000);
+    }
+
+    function createSchedule(form) {
+        const routeId = form.closest('.accordion-item').querySelector('.accordion-button')
+            .getAttribute('aria-controls').replace('collapse', '');
+
+        const formData = new FormData(form);
+
+        const daysOfWeek = [];
+        form.querySelectorAll('input[name="days_of_week[]"]:checked').forEach(checkbox => {
+            daysOfWeek.push(parseInt(checkbox.value));
+        });
+
+        formData.delete('days_of_week[]');
+
+        daysOfWeek.forEach(day => {
+            formData.append('days_of_week[]', day);
+        });
+
+        fetch(`/routes/${routeId}/schedules`, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value,
+                'Accept': 'application/json'
+            },
+            body: formData
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    addScheduleToList(routeId, data.schedule);
+                    form.reset();
+                    showAlert('Расписание создано!', 'success');
+                } else {
+                    throw new Error(data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showAlert('Ошибка: ' + error.message, 'error');
+            });
+    }
+
+    function addScheduleToList(routeId, schedule) {
+        const schedulesList = document.getElementById(`schedules-list-${routeId}`);
+
+        const scheduleHtml = `
+            <div class="card mb-2 schedule-item" data-schedule-id="${schedule.id}">
+                <div class="card-body py-2">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>${schedule.name}</strong>
+                            <br>
+                            <small class="text-muted">
+                                ${schedule.days_of_week_text} | ${schedule.time_range}
+                            </small>
+                        </div>
+                        <div>
+                            ${schedule.is_active ?
+            '<span class="badge bg-success">Активно</span>' :
+            '<span class="badge bg-secondary">Неактивно</span>'
+        }
+                            <button class="btn btn-sm btn-outline-danger ms-2"
+                                    onclick="deleteSchedule(${schedule.id})">
+                                🗑️
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        schedulesList.insertAdjacentHTML('beforeend', scheduleHtml);
+    }
+
+    // Инициализация после загрузки DOM
     document.addEventListener('DOMContentLoaded', function() {
+        // Обработчик для создания первого маршрута
         const createFirstRouteBtn = document.getElementById('createFirstRoute');
         if (createFirstRouteBtn) {
             createFirstRouteBtn.addEventListener('click', function() {
-                // Здесь можно реализовать логику создания первого маршрута
-                // Например, переход на страницу создания или открытие модального окна
                 window.location.href = '{{ route("routes.create", ["area" => $area->id]) }}';
             });
         }
+
+        // Обработчики для форм расписаний
+        document.querySelectorAll('.schedule-form').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                createSchedule(this);
+            });
+        });
     });
 </script>
