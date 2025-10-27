@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\PatrolController;
 use App\Http\Controllers\PointController;
+use App\Http\Controllers\RouteController;
 use App\Http\Controllers\ThemeController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Cache;
@@ -54,8 +55,24 @@ Route::controller(UserController::class)->group(function () {
 
 });
 
-Route::controller(\App\Http\Controllers\RouteController::class)->group(function () {
+Route::controller(RouteController::class)->group(function () {
     Route::post("/route/save-order", "saveOrder");
+
+    // Страница редактирования маршрута
+    Route::get('/routes/{route}/edit', [RouteController::class, 'edit'])
+        ->name('routes.edit');
+
+    // Создание маршрута для конкретной зоны
+    Route::get('/areas/{area}/routes/create', [RouteController::class, 'create'])
+        ->name('routes.create');
+
+    // Удаление маршрута
+    Route::delete('/routes/{route}', [RouteController::class, 'destroy'])
+        ->name('routes.destroy');
+
+    // Создание новой версии маршрута
+    Route::post('/routes/create-version', [RouteController::class, 'createNewVersion'])
+        ->name('routes.create-version');
 });
 
 Route::get('/info', function () {

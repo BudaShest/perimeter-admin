@@ -349,3 +349,80 @@ use App\Models\User;
         </div>
     </section>
 @endsection;
+
+<script>
+    // Функция для редактирования маршрута
+    function editRoute(routeId) {
+        // Здесь можно реализовать переход на страницу редактирования
+        // или открыть модальное окно
+        window.location.href = `/routes/${routeId}/edit`;
+    }
+
+    // Функция для создания новой версии маршрута
+    function createNewVersion(routeId) {
+        if (confirm('Создать новую версию этого маршрута?')) {
+            fetch('{{ route("routes.create-version") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    route_id: routeId
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Новая версия маршрута создана!');
+                        location.reload(); // Перезагружаем страницу для отображения изменений
+                    } else {
+                        alert('Ошибка: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Ошибка при создании версии');
+                });
+        }
+    }
+
+    // Функция для удаления маршрута
+    function deleteRoute(routeId) {
+        if (confirm('Вы уверены, что хотите удалить этот маршрут? Это действие нельзя отменить.')) {
+            fetch(`/routes/${routeId}`, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json'
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Маршрут удален!');
+                        location.reload();
+                    } else {
+                        alert('Ошибка: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Ошибка при удалении маршрута');
+                });
+        }
+    }
+
+    // Обработчик для создания первого маршрута
+    document.addEventListener('DOMContentLoaded', function() {
+        const createFirstRouteBtn = document.getElementById('createFirstRoute');
+        if (createFirstRouteBtn) {
+            createFirstRouteBtn.addEventListener('click', function() {
+                // Здесь можно реализовать логику создания первого маршрута
+                // Например, переход на страницу создания или открытие модального окна
+                window.location.href = '{{ route("routes.create", ["area" => $area->id]) }}';
+            });
+        }
+    });
+</script>

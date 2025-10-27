@@ -71,4 +71,45 @@ class RouteController extends Controller
             ], 500);
         }
     }
+
+    //todo edit
+    public function edit(Route $route)
+    {
+        $route->load(['routeVersions.points' => function($query) {
+            $query->orderBy('step_order');
+        }]);
+
+        return view('routes.edit', compact('route'));
+    }
+
+    //todo edit
+    public function create(Area $area)
+    {
+        return view('routes.create', compact('area'));
+    }
+
+    public function destroy(Route $route)
+    {
+        try {
+            DB::transaction(function () use ($route) {
+                // Удаляем все версии и связанные точки
+                foreach ($route->routeVersions as $version) {
+                    $version->routeVersionPoints()->delete();
+                }
+                $route->routeVersions()->delete();
+                $route->delete();
+            });
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Маршрут успешно удален'
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Ошибка удаления: ' . $e->getMessage()
+            ], 500);
+        }
+    }
 }
